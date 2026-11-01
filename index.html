@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Uji Kesiapan Framework JavaScript</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f4f6f8;
+        color: #18212b;
+        margin: 0;
+        padding: 24px;
+      }
+      main {
+        max-width: 850px;
+        margin: auto;
+      }
+      section {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px;
+        margin: 16px 0;
+      }
+      h1 {
+        margin-bottom: 8px;
+      }
+      .muted {
+        color: #64748b;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      input,
+      select,
+      button {
+        font: inherit;
+        padding: 9px 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+      }
+      button {
+        cursor: pointer;
+        background: #0f766e;
+        color: white;
+        border: 0;
+      }
+      .task {
+        border: 1px solid #e2e8f0;
+        border-radius: 9px;
+        padding: 12px;
+        margin: 10px 0;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .task.done .task-title {
+        text-decoration: line-through;
+        color: #64748b;
+      }
+      .task-title {
+        flex: 1;
+        overflow-wrap: anywhere;
+      }
+      .stats {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+      code {
+        background: #f1f5f9;
+        padding: 2px 5px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Gabut Guys</h1>
+      <p class="muted">
+        Uji Pemahaman Saat Gabut (Kerangka By Gpt and Consultant)
+      </p>
+      <section>
+        <h2>Brief proyek</h2>
+        <p>
+          Buat aplikasi <strong>Daftar Tugas</strong>: tambah tugas, tandai
+          selesai, hapus, dan filter.
+        </p>
+        <ol>
+          <li>Jangan gunakan framework, library, atau localStorage.</li>
+          <li>Isi bagian TODO, jangan hapus elemen HTML atau ubah ID.</li>
+          <li>Kerjakan berurutan. Buka petunjuk hanya jika buntu.</li>
+        </ol>
+      </section>
+      <section>
+        <h2>Antarmuka</h2>
+        <form id="task-form" class="row">
+          <input
+            id="task-input"
+            type="text"
+            placeholder="Contoh: Latihan array"
+            aria-label="Nama tugas"
+          /><button type="submit">Tambah tugas</button>
+        </form>
+        <p id="message" class="muted" aria-live="polite"></p>
+        <div class="stats">
+          <span>Total: <strong id="total-count">0</strong></span
+          ><span>Belum selesai: <strong id="pending-count">0</strong></span
+          ><span>Selesai: <strong id="done-count">0</strong></span>
+        </div>
+      </section>
+      <section>
+        <div class="row">
+          <h2 style="margin: 0; flex: 1">Daftar tugas</h2>
+          <select id="filter" aria-label="Filter tugas">
+            <option value="all">Semua</option>
+            <option value="pending">Belum selesai</option>
+            <option value="done">Selesai</option>
+          </select>
+        </div>
+        <div id="task-list"></div>
+      </section>
+      <section>
+        <h2>Petunjuk bertahap</h2>
+        <details>
+          <summary>Petunjuk 1 — tambah tugas</summary>
+          <p>
+            Gunakan <code>trim()</code>. Jika kosong, tampilkan pesan dan
+            return. Buat object dengan id, title, completed, masukkan ke array
+            tasks.
+          </p>
+        </details>
+        <details>
+          <summary>Petunjuk 2 — cari dan ubah</summary>
+          <p>
+            Gunakan <code>find()</code> untuk mencari berdasarkan id. Toggle
+            berarti membalik completed true/false.
+          </p>
+        </details>
+        <details>
+          <summary>Petunjuk 3 — filter dan statistik</summary>
+          <p>
+            Gunakan <code>filter()</code> untuk daftar yang tampil. Statistik
+            selesai/belum selesai bisa dihitung dengan
+            <code>filter().length</code>.
+          </p>
+        </details>
+        <details>
+          <summary>Petunjuk 4 — render DOM</summary>
+          <p>
+            Kosongkan list. Untuk setiap tugas, buat elemen, isi teks, buat
+            tombol, pasang listener, lalu <code>appendChild()</code>. Setelah
+            data berubah, panggil render lagi.
+          </p>
+        </details>
+      </section>
+    </main>
+    <script>
+      "use strict";
+      let tasks = [
+        { id: 1, title: "Pelajari array dan object", completed: false },
+        { id: 2, title: "Latihan function", completed: true },
+      ];
+      let nextId = 3;
+      const form = document.querySelector("#task-form");
+      const input = document.querySelector("#task-input");
+      const message = document.querySelector("#message");
+      const list = document.querySelector("#task-list");
+      const filter = document.querySelector("#filter");
+      const totalCount = document.querySelector("#total-count");
+      const pendingCount = document.querySelector("#pending-count");
+      const doneCount = document.querySelector("#done-count");
+
+      // TODO 1: tambahTugas(judul): trim, tolak kosong, buat object task,
+      // push ke tasks, naikkan nextId, render().
+      function tambahTugas(judul) {
+        // if (judul.trim() === "")
+        //   return (message.textContent = "Judul Kegiatan tidak valid lembu");
+
+        // message.textContent = "";
+
+        // tasks.push({ id: nextId, title: judul, completed: false });
+        // nextId += 1;
+        // render();
+
+        // Sedikit perbaikan dari gpt
+        if (judul.trim() === "") {
+          message.textContent = "Judul tugas tidak boleh kosong";
+          return;
+        }
+
+        message.textContent = "";
+
+        tasks.push({ id: nextId, title: judul, completed: false });
+        nextId += 1;
+
+        render();
+      }
+
+      // TODO 2: toggleTugas(id): cari dengan find(), balik completed,
+      // lalu render jika tugas ditemukan.
+      function toggleTugas(id) {
+        const tugas = tasks.find((task) => task.id === id);
+        if (tugas) {
+          tugas.completed = !tugas.completed;
+          render();
+        }
+      }
+
+      // TODO 3: hapusTugas(id): filter tasks agar id tersebut terhapus,
+      // simpan kembali ke tasks, lalu render().
+      function hapusTugas(id) {
+        const hasilFilter = tasks.filter((task) => task.id !== id);
+        tasks = hasilFilter;
+        render();
+      }
+
+      // TODO 4: render():
+      // A) Perbarui totalCount, pendingCount, doneCount.
+      // B) Kosongkan list.
+      // C) Pilih data sesuai filter.value: all / pending / done.
+      // D) Untuk setiap task, buat div.task, span.task-title (gunakan textContent),
+      // tombol toggle dan tombol hapus; pasang listener dan append ke list.
+      function render() {
+        const total = tasks.length;
+        const pending = tasks.filter((taks) => taks.completed === false).length;
+        const done = tasks.filter((taks) => taks.completed === true).length;
+
+        totalCount.textContent = total;
+        pendingCount.textContent = pending;
+        doneCount.textContent = done;
+
+        list.innerHTML = "";
+
+        // Jadi alurnya:
+        // 1. Periksa kondisi filter.value.
+        // 2. Jika kondisinya benar, jalankan isi blok {}.
+        // 3. Hasil filter() dimasukkan ke filteredTasks.
+        // 4. Setelah blok selesai, program lanjut ke filteredTasks.forEach().
+
+        // Lalu kapan menggunakan return?
+        // Contohnya kalau lu membuat function yang bertugas mengembalikan hasil:
+        // function ambilTugasSelesai() {
+        //   return tasks.filter((task) => task.completed === true);
+        // }
+
+        // Di sini return diperlukan agar hasil function bisa diterima oleh pemanggilnya.
+
+        // Misalnya:
+        // const hasil = ambilTugasSelesai();
+
+        // Perbedaan utamanya:
+        // Assignment (=)	Return
+        // Menyimpan nilai ke variabel	Mengembalikan nilai dari function
+        // Bisa digunakan dalam blok if/else	Digunakan untuk mengembalikan hasil function
+
+        let filteredTasks = [];
+
+        if (filter.value === "all") {
+          filteredTasks = tasks;
+        } else if (filter.value === "pending") {
+          filteredTasks = tasks.filter((taks) => taks.completed === false);
+        } else if (filter.value === "done") {
+          filteredTasks = tasks.filter((taks) => taks.completed === true);
+        }
+
+        filteredTasks.forEach((item) => {
+          const taskElement = document.createElement("div");
+          const titleElement = document.createElement("span");
+          const toggleButton = document.createElement("button");
+          const deleteButton = document.createElement("button");
+
+          taskElement.classList.add("task");
+          titleElement.classList.add("task-title");
+
+          if (item.completed) {
+            taskElement.classList.add("done");
+          }
+
+          titleElement.textContent = item.title;
+
+          // appendChild() adalah metode bawaan dalam JavaScript (bagian dari Document Object
+          // Model / DOM) yang digunakan untuk menambahkan elemen baru sebagai anak terakhir
+          // anak terakhir (last child) dari suatu elemen induk (parent element)
+          // Sintaks Penulisan:
+          // parentingElement.appendChild(childNode);
+          // parentingElement: Elemen induk tempat anak akan dimasukkan.
+          // childNode: Elemen atau node yang ingin ditambahkan ke bagian paling akhir dari elemen induk
+
+          // Perbedaan append dengan Appenchikld? (Tulis di readme nanti)
+
+          // appendChild() itu meminta elemen DOM, sedangkan toggleButton.textContent = "Selesai" menghasilkan nilai string "Selesai",
+          // bukan elemen tombolnya.
+          // Jadi, pisahkan menjadi dua langkah:
+          toggleButton.textContent = item.completed
+            ? "Batalkan Selesai"
+            : "Selesaikan";
+          deleteButton.textContent = "Hapus";
+
+          taskElement.appendChild(titleElement);
+          taskElement.appendChild(toggleButton);
+          taskElement.appendChild(deleteButton);
+          //  Ingat polanya:
+          // 1. Buat elemen.
+          // 2. Atur isi atau atribut elemennya.
+          // 3. Masukkan elemen ke parent menggunakan appendChild().
+
+          list.appendChild(taskElement);
+
+          toggleButton.addEventListener("click", () => {
+            toggleTugas(item.id);
+          });
+
+          deleteButton.addEventListener("click", () => {
+            hapusTugas(item.id);
+          });
+
+          // Posisi event listener
+          // Kode lu sudah benar. Event listener boleh dipasang sebelum atau sesudah elemen dimasukkan ke DOM. Jadi posisi sekarang tidak masalah.
+        });
+      }
+
+      // TODO 5: submit form: preventDefault(), tambahTugas(input.value), kosongkan input.
+      // Filter change: panggil render().
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        tambahTugas(input.value);
+        input.value = "";
+      });
+      filter.addEventListener("change", () => {
+        render();
+      });
+
+      // TODO 6: panggil render() pertama kali.
+      render();
+    </script>
+  </body>
+</html>
